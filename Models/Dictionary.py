@@ -49,13 +49,18 @@ class Dictionary:
         self.bd.execute()
         self.bd.commit()
 
-    def modifierUnMot(self, datas):
+    def modifierUnMot(self, nom, datas):
         self.query.cleaner()
         self.query.update('word', datas)
-        self.query.where('nom', '=', f"'{datas['nom']}'")
+        self.query.where('nom', '=', f"'{nom}'")
         self.bd.requete = self.query
         self.bd.execute()
         self.bd.commit()
 
     def supprimerUnMot(self, nom):
-        pass
+        self.query.cleaner()
+        self.query.delete('word')
+        self.query.where('nom', '=', f"'{nom}'")
+        self.bd.requete = self.query
+        self.bd.execute()
+        self.bd.commit()

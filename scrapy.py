@@ -1,7 +1,7 @@
 
 import requests
 from bs4 import BeautifulSoup
-from Models.Dictionnary import Dictionary
+from Models.Dictionary import Dictionary
 
 aphabetique = ['a', 'b', 'c', 'd', 'e', 'f',
                'g',

@@ -30,6 +30,9 @@ class Word:
     def paronyme(self):
         return self.selectElt('paronyme')
 
+    def difficulte(self):
+        return self.selectElt('difficulte')
+
     def existe(self):
         return self.selectElt('nom') != None
 

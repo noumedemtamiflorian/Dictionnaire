@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
-from Models.Dictionnary import Dictionary
+from Models.Dictionary import Dictionary
 from Models.Word import Word
 from functools import partial
 
@@ -13,6 +13,7 @@ class Application:
         self.root.geometry("470x700+0+0")
         self.root.resizable(1000, 1000)
         self.mot = StringVar()
+        self.motSearch = StringVar(value="")
         self.action = 'home'
         self.dictionary = Dictionary()
 
@@ -25,7 +26,9 @@ class Application:
         Button(self.root, text="Rechercher un mot",
                command=self.search
                ).place(y=5, x=300)
-        self.mainFrame = Frame(self.root, width=470, height=650)
+
+        self.mainFrame = Frame(self.root, width=470,
+                               height=1000,)
         self.mainFrame.place(x=0, y=50)
 
         self.display()
@@ -34,6 +37,24 @@ class Application:
         for widget in self.mainFrame.winfo_children():
             widget.destroy()
 
+# Supprimer
+
+    def deleteWord(self, nom):
+        self.destroyWidget()
+        Label(self.mainFrame, text=f"Suppression du mot {nom}",
+              justify="center").place(x=150, y=25)
+
+        Label(self.mainFrame, text="Voulez vouz supprimer ce mot").place(
+            x=125, y=100)
+
+        Button(self.mainFrame, command=partial(self.delete, nom), text="Oui").place(
+            x=150, y=150)
+        Button(self.mainFrame, command=self.display, text="Non").place(
+            x=250, y=150)
+
+    def delete(self, nom):
+        self.dictionary.supprimerUnMot(nom)
+        self.display()
 # lister de mot
 
     def display(self):
@@ -46,8 +67,9 @@ class Application:
             i += 1
             Label(self.mainFrame, text=f"{i}- {resultat[0]}").place(x=20, y=y)
             Button(self.mainFrame, command=partial(self.consulterMot,
-                                                   resultat[0]), text="consulter").place(x=175, y=y)
-            Button(self.mainFrame, text="supprimer").place(x=275, y=y)
+                   resultat[0]), text="consulter").place(x=175, y=y)
+            Button(self.mainFrame, text="supprimer", command=partial(self.deleteWord,
+                                                                     resultat[0])).place(x=275, y=y)
             Button(self.mainFrame,  command=partial(self.updateWord,
                                                     resultat[0]), text="modifier").place(x=375, y=y)
             y += 50
@@ -61,23 +83,47 @@ class Application:
         Label(self.mainFrame, text=f"Consultation du mot {self.mot.get()}",
               justify="center").place(x=200, y=10)
 
-        Label(self.mainFrame, text="Etymologie : ").place(x=100, y=50)
-        Label(self.mainFrame, text=mot.etymologie()).place(x=200, y=50)
+        i = 50
+        if mot.etymologie() != None:
+            Label(self.mainFrame, text="Etymologie : ").place(x=100, y=i)
+            Label(self.mainFrame, wraplength=250,
+                  text=mot.etymologie()).place(x=200, y=i)
 
-        Label(self.mainFrame, text="Definition : ").place(x=100, y=100)
-        Label(self.mainFrame, text=mot.definition()).place(x=200, y=100)
+        if mot.definition() != None:
+            i += 50
+            Label(self.mainFrame, text="Definition : ").place(x=100, y=i)
+            Label(self.mainFrame, wraplength=250,
+                  text=mot.definition()).place(x=200, y=i)
 
-        Label(self.mainFrame, text="Synonyme : ").place(x=100, y=150)
-        Label(self.mainFrame, text=mot.synonyme()).place(x=200, y=150)
+        if mot.synonyme() != None:
+            i += 50
+            Label(self.mainFrame, text="Synonyme : ").place(x=100, y=i)
+            Label(self.mainFrame, wraplength=250,
+                  text=mot.synonyme()).place(x=200, y=i)
 
-        Label(self.mainFrame, text="Antonyme : ").place(x=100, y=200)
-        Label(self.mainFrame, text=mot.antonyme()).place(x=200, y=200)
+        if mot.antonyme() != None:
+            i += 50
+            Label(self.mainFrame, text="Antonyme : ").place(x=100, y=i)
+            Label(self.mainFrame, wraplength=250,
+                  text=mot.antonyme()).place(x=200, y=i)
 
-        Label(self.mainFrame, text="Homonyme : ").place(x=100, y=250)
-        Label(self.mainFrame, text=mot.homonyme()).place(x=200, y=250)
+        if mot.homonyme() != None:
+            i += 50
+            Label(self.mainFrame, text="Homonyme : ").place(x=100, y=i)
+            Label(self.mainFrame, wraplength=250,
+                  text=mot.homonyme()).place(x=200, y=i)
 
-        Label(self.mainFrame, text="Paronyme : ").place(x=100, y=300)
-        Label(self.mainFrame, text=mot.paronyme()).place(x=200, y=300)
+        if mot.paronyme() != None:
+            i += 50
+            Label(self.mainFrame, text="Paronyme : ").place(x=100, y=i)
+            Label(self.mainFrame,  wraplength=250,
+                  text=mot.paronyme()).place(x=200, y=i)
+
+        if mot.difficulte() != None:
+            i += 50
+            Label(self.mainFrame, text="Difficulte : ").place(x=100, y=i)
+            Label(self.mainFrame,  wraplength=250,
+                  text=mot.difficulte()).place(x=200, y=i)
 
 # Modifier un mot
     def updateWord(self, nom):
@@ -89,6 +135,7 @@ class Application:
         self.homonyme = StringVar()
         self.paronyme = StringVar()
         self.etymologie = StringVar()
+        self.difficulte = StringVar()
         self.mot.set(nom)
 
         mot = Word(self.mot.get())
@@ -99,6 +146,8 @@ class Application:
         self.antonyme.set(mot.antonyme()if mot.antonyme() != None else '')
         self.homonyme.set(mot.homonyme()if mot.homonyme() != None else '')
         self.paronyme.set(mot.paronyme()if mot.paronyme() != None else '')
+        self.difficulte.set(
+            mot.difficulte()if mot.difficulte() != None else '')
         self.etymologie.set(
             mot.etymologie()if mot.etymologie() != None else '')
 
@@ -109,7 +158,8 @@ class Application:
         Entry(self.mainFrame, textvariable=self.nom).place(x=200, y=50)
 
         Label(self.mainFrame, text="Definition : ").place(x=100, y=100)
-        Entry(self.mainFrame, textvariable=self.definition).place(x=200, y=100)
+        Entry(self.mainFrame, textvariable=self.definition).place(
+            x=200, y=90, width=165, height=50)
 
         Label(self.mainFrame, text="Synonyme : ").place(x=100, y=150)
         Entry(self.mainFrame, textvariable=self.synonyme).place(x=200, y=150)
@@ -120,14 +170,19 @@ class Application:
         Label(self.mainFrame, text="Homonyme : ").place(x=100, y=250)
         Entry(self.mainFrame, textvariable=self.homonyme).place(x=200, y=250)
 
-        Label(self.mainFrame, text="Paronyme : ").place(x=100, y=300)
-        Entry(self.mainFrame, textvariable=self.paronyme).place(x=200, y=300)
+        Label(self.mainFrame, text="Difficulte : ").place(x=100, y=300)
+        Entry(self.mainFrame, textvariable=self.difficulte).place(x=200, y=300)
 
-        Label(self.mainFrame, text="Etymologie : ").place(x=100, y=350)
-        Entry(self.mainFrame, textvariable=self.etymologie).place(x=200, y=350)
-        Button(text="Modifier", command=self.modifier).place(x=200, y=450)
+        Label(self.mainFrame, text="Paronyme : ").place(x=100, y=350)
+        Entry(self.mainFrame, textvariable=self.paronyme).place(x=200, y=350)
 
-    def modifier(self):
+        Label(self.mainFrame, text="Etymologie : ").place(x=100, y=400)
+        Entry(self.mainFrame, textvariable=self.etymologie).place(x=200, y=400)
+
+        Button(self.mainFrame, text="Modifier",
+               command=partial(self.modifier, nom)).place(x=200, y=450)
+
+    def modifier(self, nom):
         if self.definition.get() == "" or self.nom.get() == "":
             messagebox.showerror(message=f"Entrer un nom et une definition")
         else:
@@ -141,9 +196,10 @@ class Application:
                     'synonyme': self.synonyme.get(),
                     'antonyme': self.antonyme.get(),
                     'paronyme': self.paronyme.get(),
-                    'homonyme': self.homonyme.get()
+                    'homonyme': self.homonyme.get(),
+                    'difficulte': self.difficulte.get()
                 }
-                self.dictionary.modifierUnMot(datas)
+                self.dictionary.modifierUnMot(nom, datas)
                 messagebox.showinfo(message=f"Mot modifier avec succes")
 
 # Ajouter un mot
@@ -157,6 +213,8 @@ class Application:
         self.homonyme = StringVar()
         self.paronyme = StringVar()
         self.etymologie = StringVar()
+        self.difficulte = StringVar()
+
         Label(self.mainFrame, text="Ajouter un mot",
               justify="center").place(x=200, y=10)
 
@@ -164,7 +222,8 @@ class Application:
         Entry(self.mainFrame, textvariable=self.nom).place(x=200, y=50)
 
         Label(self.mainFrame, text="Definition : ").place(x=100, y=100)
-        Entry(self.mainFrame, textvariable=self.definition).place(x=200, y=100)
+        Entry(self.mainFrame, textvariable=self.definition).place(
+            x=200, y=90, width=165, height=50)
 
         Label(self.mainFrame, text="Synonyme : ").place(x=100, y=150)
         Entry(self.mainFrame, textvariable=self.synonyme).place(x=200, y=150)
@@ -178,8 +237,12 @@ class Application:
         Label(self.mainFrame, text="Paronyme : ").place(x=100, y=300)
         Entry(self.mainFrame, textvariable=self.paronyme).place(x=200, y=300)
 
-        Label(self.mainFrame, text="Etymologie : ").place(x=100, y=350)
-        Entry(self.mainFrame, textvariable=self.etymologie).place(x=200, y=350)
+        Label(self.mainFrame, text="Difficulte : ").place(x=100, y=350)
+        Entry(self.mainFrame, textvariable=self.difficulte).place(x=200, y=350)
+
+        Label(self.mainFrame, text="Etymologie : ").place(x=100, y=400)
+        Entry(self.mainFrame, textvariable=self.etymologie).place(x=200, y=400)
+
         Button(self.mainFrame, text="Enregistrer",
                command=self.enregistrer).place(x=200, y=450)
 
@@ -197,7 +260,8 @@ class Application:
                     'synonyme': self.synonyme.get(),
                     'antonyme': self.antonyme.get(),
                     'paronyme': self.paronyme.get(),
-                    'homonyme': self.homonyme.get()
+                    'homonyme': self.homonyme.get(),
+                    'difficulte': self.difficulte.get()
                 }
                 self.dictionary.AjouterUnMot(datas)
                 self.nom.set('')
@@ -207,6 +271,7 @@ class Application:
                 self.antonyme.set('')
                 self.paronyme.set('')
                 self.homonyme.set('')
+                self.difficulte.set('')
                 messagebox.showinfo(message=f"Mot enregistrer avec succes")
 
 
@@ -221,7 +286,7 @@ class Application:
             font=('Algerian', 10, "bold"),
             fg='white'
         ).place(x=0, y=0, width=470)
-        Entry(self.mainFrame, textvariable=self.mot, font=(
+        Entry(self.mainFrame, textvariable=self.motSearch, font=(
             'times new roman', 20, "bold"),
         ).place(x=30, y=45)
         Button(
@@ -236,14 +301,14 @@ class Application:
         self.rltFrame.place(x=0, y=100, width=450, height=600)
 
     def rechercher(self):
-        if self.mot.get() == "":
+        if self.motSearch.get() == "":
             messagebox.showerror(
                 message="Entrer au moins une chaine de caractere")
         else:
             for widget in self.rltFrame.winfo_children():
                 widget.destroy()
             dictionary = Dictionary()
-            results = dictionary.rechercherUnMot(self.mot.get())
+            results = dictionary.rechercherUnMot(self.motSearch.get())
             if results != None:
                 y = 10
                 i = 0
@@ -255,5 +320,5 @@ class Application:
                     y += 40
             else:
                 Label(self.rltFrame,
-                      text=f"Aucun mot contenant le caractere {self.mot.get()}"
+                      text=f"Aucun mot contenant le caractere {self.motSearch.get()}"
                       ).place(x=40, y=10)
