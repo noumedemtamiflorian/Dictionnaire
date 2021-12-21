@@ -10,28 +10,25 @@ class Word:
         self.query = QueryBuilder()
 
     def definition(self):
-        return self.selectElt('definition')
-
-    def etymologie(self):
-        return self.selectElt('etymologie')
+        return "" if self.selectElt('definition') == None else self.selectElt('definition')
 
     def synonyme(self):
-        return self.selectElt('synonyme')
+        return "" if self.selectElt('synonyme') == None else self.selectElt('synonyme')
 
     def etymologie(self):
-        return self.selectElt('etymologie')
+        return "" if self.selectElt('etymologie') == None else self.selectElt('etymologie')
 
     def antonyme(self):
-        return self.selectElt('antonyme')
+        return "" if self.selectElt('antonyme') == None else self.selectElt('antonyme')
 
     def homonyme(self):
-        return self.selectElt('homonyme')
+        return "" if self.selectElt('homonyme') == None else self.selectElt('homonyme')
 
     def paronyme(self):
-        return self.selectElt('paronyme')
+        return "" if self.selectElt('paronyme') == None else self.selectElt('paronyme')
 
     def difficulte(self):
-        return self.selectElt('difficulte')
+        return "" if self.selectElt('difficulte') == None else self.selectElt('difficulte')
 
     def existe(self):
         return self.selectElt('nom') != None
