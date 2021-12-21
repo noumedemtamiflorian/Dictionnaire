@@ -13,6 +13,7 @@ class Dictionary:
     def afficherTout(self):
         self.query.cleaner()
         self.query.select(['nom'], 'word')
+        self.query.orderBY({'id': 'DESC'})
         self.bd.requete = self.query
         self.bd.execute()
         self.bd.fetchAll()

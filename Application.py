@@ -54,6 +54,7 @@ class Application:
 
     def delete(self, nom):
         self.dictionary.supprimerUnMot(nom)
+        messagebox.showinfo(message=f"Le mot {nom} a bien ete supprimer")
         self.display()
 # lister de mot
 
@@ -211,8 +212,11 @@ class Application:
                 }
                 self.dictionary.modifierUnMot(nom, datas)
                 messagebox.showinfo(message=f"Mot modifier avec succes")
+                self.display()
+
 
 # Ajouter un mot
+
     def addWord(self):
         self.destroyWidget()
 
@@ -284,10 +288,9 @@ class Application:
                 self.homonyme.set('')
                 self.difficulte.set('')
                 messagebox.showinfo(message=f"Mot enregistrer avec succes")
-
+                self.display()
 
 # rechercher un mot
-
 
     def search(self):
         self.destroyWidget()

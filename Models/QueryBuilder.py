@@ -26,12 +26,20 @@ class QueryBuilder:
         self.requete += f" INSERT INTO {table} ({columns}) VALUES({values})"
         return self
 
+    def orderBY(self, datas):
+        condition = ""
+        for key, value in datas.items():
+            condition += f" {key}  {value},"
+        requete = f" ORDER BY {condition}"
+        self.requete += requete[0:-1]
+        return self
+
     def update(self, table, datas):
         condition = ""
         for key, value in datas.items():
             condition += f"{key} = '{value}',"
         requete = f" UPDATE {table} SET {condition}"
-        self.requete = requete[0:-1]
+        self.requete += requete[0:-1]
         return self
 
     def delete(self, table):
