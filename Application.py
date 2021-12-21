@@ -17,7 +17,7 @@ class Application:
         self.action = 'home'
         self.dictionary = Dictionary()
 
-        Button(self.root, text="Liste de mot",
+        Button(self.root, text="Liste de mots",
                command=self.display
                ).place(y=5, x=20)
         Button(self.root, text="Ajouter un mot",
@@ -44,12 +44,12 @@ class Application:
         Label(self.mainFrame, text=f"Suppression du mot {nom}",
               justify="center").place(x=150, y=25)
 
-        Label(self.mainFrame, text="Voulez vouz supprimer ce mot").place(
+        Label(self.mainFrame, text="Voulez vouz supprimez ce mot").place(
             x=125, y=100)
 
-        Button(self.mainFrame, command=partial(self.delete, nom), text="Oui").place(
+        Button(self.mainFrame, bg='red', command=partial(self.delete, nom), text="Oui").place(
             x=150, y=150)
-        Button(self.mainFrame, command=self.display, text="Non").place(
+        Button(self.mainFrame, bg='green', command=self.display, text="Non").place(
             x=250, y=150)
 
     def delete(self, nom):
@@ -59,19 +59,22 @@ class Application:
 
     def display(self):
         self.destroyWidget()
-        Label(self.mainFrame, text="Liste de mot",
-              justify="center").place(x=200, y=10)
+        Label(self.mainFrame,
+              font=('times new roman', 20, "bold"),
+              text="Liste de mots",
+              justify="center").place(x=175, y=8)
         resultats = Dictionary().afficherTout()
         i, y = 0, 50
         for resultat in resultats:
             i += 1
             Label(self.mainFrame, text=f"{i}- {resultat[0]}").place(x=20, y=y)
             Button(self.mainFrame, command=partial(self.consulterMot,
-                   resultat[0]), text="consulter").place(x=175, y=y)
-            Button(self.mainFrame, text="supprimer", command=partial(self.deleteWord,
-                                                                     resultat[0])).place(x=275, y=y)
+                   resultat[0]), text="Consulter").place(x=175, y=y)
+            Button(self.mainFrame,
+                   text="Supprimer", command=partial(self.deleteWord,
+                                                     resultat[0])).place(x=275, y=y)
             Button(self.mainFrame,  command=partial(self.updateWord,
-                                                    resultat[0]), text="modifier").place(x=375, y=y)
+                                                    resultat[0]), text="Modifier").place(x=375, y=y)
             y += 50
 
 # consulter un mot
@@ -80,48 +83,55 @@ class Application:
         self.destroyWidget()
         self.mot.set(nom)
         mot = Word(self.mot.get())
-        Label(self.mainFrame, text=f"Consultation du mot {self.mot.get()}",
-              justify="center").place(x=200, y=10)
-
+        Label(self.mainFrame,
+              font=('Algerian', 15, "bold"), fg='white', text=f"Consultation du mot {self.mot.get()}",
+              justify="center").place(x=100, y=10)
         i = 50
         if mot.etymologie() != None:
-            Label(self.mainFrame, text="Etymologie : ").place(x=100, y=i)
+            Label(self.mainFrame, font=('Algerian', 10, "bold"),
+                  text="Etymologie : ").place(x=100, y=i)
             Label(self.mainFrame, wraplength=250,
                   text=mot.etymologie()).place(x=200, y=i)
 
         if mot.definition() != None:
             i += 50
-            Label(self.mainFrame, text="Definition : ").place(x=100, y=i)
+            Label(self.mainFrame, font=('Algerian', 10, "bold"),
+                  text="Definition : ").place(x=100, y=i)
             Label(self.mainFrame, wraplength=250,
                   text=mot.definition()).place(x=200, y=i)
 
         if mot.synonyme() != None:
             i += 50
-            Label(self.mainFrame, text="Synonyme : ").place(x=100, y=i)
+            Label(self.mainFrame, font=('Algerian', 10, "bold"),
+                  text="Synonyme : ").place(x=100, y=i)
             Label(self.mainFrame, wraplength=250,
                   text=mot.synonyme()).place(x=200, y=i)
 
         if mot.antonyme() != None:
             i += 50
-            Label(self.mainFrame, text="Antonyme : ").place(x=100, y=i)
+            Label(self.mainFrame,  font=('Algerian', 10, "bold"),
+                  text="Antonyme : ").place(x=100, y=i)
             Label(self.mainFrame, wraplength=250,
                   text=mot.antonyme()).place(x=200, y=i)
 
         if mot.homonyme() != None:
             i += 50
-            Label(self.mainFrame, text="Homonyme : ").place(x=100, y=i)
+            Label(self.mainFrame, text="Homonyme : ", font=(
+                'Algerian', 10, "bold")).place(x=100, y=i)
             Label(self.mainFrame, wraplength=250,
                   text=mot.homonyme()).place(x=200, y=i)
 
         if mot.paronyme() != None:
             i += 50
-            Label(self.mainFrame, text="Paronyme : ").place(x=100, y=i)
+            Label(self.mainFrame, text="Paronyme : ", font=(
+                'Algerian', 10, "bold")).place(x=100, y=i)
             Label(self.mainFrame,  wraplength=250,
                   text=mot.paronyme()).place(x=200, y=i)
 
         if mot.difficulte() != None:
             i += 50
-            Label(self.mainFrame, text="Difficulte : ").place(x=100, y=i)
+            Label(self.mainFrame, text="Difficulte : ", font=(
+                'Algerian', 10, "bold")).place(x=100, y=i)
             Label(self.mainFrame,  wraplength=250,
                   text=mot.difficulte()).place(x=200, y=i)
 
@@ -215,7 +225,8 @@ class Application:
         self.etymologie = StringVar()
         self.difficulte = StringVar()
 
-        Label(self.mainFrame, text="Ajouter un mot",
+        Label(self.mainFrame,
+              font=('Algerian', 15, "bold"), text="Ajouter un mot",
               justify="center").place(x=200, y=10)
 
         Label(self.mainFrame, text="Nom : ").place(x=100, y=50)
@@ -277,14 +288,14 @@ class Application:
 
 # rechercher un mot
 
+
     def search(self):
         self.destroyWidget()
         Label(
             self.mainFrame,
             text="Rechercher un mot",
             bd=10,
-            font=('Algerian', 10, "bold"),
-            fg='white'
+            font=('Algerian', 15, "bold"),
         ).place(x=0, y=0, width=470)
         Entry(self.mainFrame, textvariable=self.motSearch, font=(
             'times new roman', 20, "bold"),
