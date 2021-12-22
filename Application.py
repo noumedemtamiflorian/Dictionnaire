@@ -39,7 +39,7 @@ class Application:
         self.mainFrame['bg'] = "#26CFFF"
         self.mainFrame.place(x=0, y=50)
 
-        self.display()
+        self.search()
 
     def destroyWidget(self):
         for widget in self.mainFrame.winfo_children():
@@ -64,6 +64,7 @@ class Application:
         Button(self.mainFrame,
                activebackground="#4BFA71", bg='#4BFA71', command=self.display, text="Non").place(
             x=250, y=150)
+# Supprimer un mot
 
     def delete(self, nom):
         self.dictionary.supprimerUnMot(nom)
@@ -162,8 +163,20 @@ class Application:
                 'Algerian', 10, "bold")).place(x=100, y=i)
             Label(self.mainFrame, bg=self.bgFont,  wraplength=250,
                   text=mot.difficulte()).place(x=200, y=i)
+        i += 100
+        Button(self.mainFrame,
+               activebackground="#DEC221",
+               bg="#DEC221",
+               command=partial(self.updateWord, nom), text="Modifier").place(x=175, y=i)
+        Button(self.mainFrame,
+               activebackground="red",
+               bg="#F55E31",
+               text="Supprimer", command=partial(self.deleteWord,
+                                                 nom)).place(x=275, y=i)
+
 
 # Modifier un mot
+
     def updateWord(self, nom):
         self.destroyWidget()
         self.nom = StringVar()
@@ -180,10 +193,10 @@ class Application:
 
         self.nom.set(self.mot.get())
         self.definition.set(mot.definition())
-        self.synonyme.set(mot.synonyme() if mot.synonyme() != None else '')
-        self.antonyme.set(mot.antonyme()if mot.antonyme() != None else '')
-        self.homonyme.set(mot.homonyme()if mot.homonyme() != None else '')
-        self.paronyme.set(mot.paronyme()if mot.paronyme() != None else '')
+        self.synonyme.set(mot.synonyme())
+        self.antonyme.set(mot.antonyme())
+        self.homonyme.set(mot.homonyme())
+        self.paronyme.set(mot.paronyme())
         self.difficulte.set(
             mot.difficulte()if mot.difficulte() != None else '')
         self.etymologie.set(
@@ -349,9 +362,10 @@ class Application:
             bg=self.bgFont,
             font=('Algerian', 15, "bold"),
         ).place(x=0, y=0, width=470)
-        Entry(self.mainFrame, textvariable=self.motSearch, font=(
-            'times new roman', 20, "bold"),
-        ).place(x=30, y=45)
+        Entry(self.mainFrame,
+              textvariable=self.motSearch,
+              font=('times new roman', 20, "bold"),
+              ).place(x=30, y=45)
         Button(
             self.mainFrame,
             text="Rechercher",
@@ -382,6 +396,12 @@ class Application:
                           bg=self.bgFont,
                           text=f"{i} -  {result[0]}"
                           ).place(x=40, y=y)
+                    Button(self.rltFrame,
+                           activebackground="#DEC221",
+                           bg='#DEC221',
+                           command=partial(self.consulterMot, result[0]),
+                           text="Consulter").place(
+                        x=300, y=y)
                     y += 40
             else:
                 Label(self.rltFrame,

@@ -36,7 +36,7 @@ class Word:
     def update(self, datas):
         self.query.cleaner()
         self.query.update('word', datas).where(
-            'nom', '=', f" '{self.nom}'")
+            'nom', '=', f' "{self.nom}"')
         self.bd.requete = self.query
         self.bd.execute()
         self.bd.commit()
@@ -51,7 +51,7 @@ class Word:
     def selectElt(self, nom):
         self.query.cleaner()
         self.query.select([nom], 'word').where(
-            'nom', '=', f" '{self.nom}'")
+            'nom', '=', f' "{self.nom}"')
         self.bd.requete = self.query
         self.bd.execute().fetchOne()
         if self.bd.results == None:
