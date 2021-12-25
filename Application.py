@@ -10,7 +10,7 @@ class Application:
     def __init__(self, root):
         self.root = root
         self.root.title('Dictionaire')
-        self.root.geometry("470x700+0+0")
+        self.root.geometry("500x700+0+0")
         self.root.resizable(1000, 1000)
         self.root['bg'] = "#26CFFF"
         self.bgFont = "#26CFFF"
@@ -18,28 +18,60 @@ class Application:
         self.motSearch = StringVar(value="")
         self.action = 'home'
         self.dictionary = Dictionary()
-
-        Button(self.root, text="Liste de mots",
-               activebackground="#DEC221",
-               bg="#DEC221",
-               command=self.display
-               ).place(y=5, x=20)
-        Button(self.root, text="Ajouter un mot",
-               activebackground="#F55E31",
-               bg="#F55E31",
-               command=self.addWord
-               ).place(y=5, x=153)
-        Button(self.root, text="Rechercher un mot",
-               activebackground="#4BFA71",
-               bg="#4BFA71",               command=self.search
-               ).place(y=5, x=300)
-
-        self.mainFrame = Frame(self.root, width=470,
-                               height=1000,)
-        self.mainFrame['bg'] = "#26CFFF"
-        self.mainFrame.place(x=0, y=50)
-
+        self.menu()
+        self.canvas()
         self.search()
+
+    def canvas(self):
+
+        canvas = Canvas(self.root, background="#26CFFF", width=200)
+        scroll_y = Scrollbar(self.root, orient="vertical",
+                             command=canvas.yview)
+
+        self.mainFrame = Frame(canvas, width=470,
+                               height=3000,)
+        self.mainFrame['bg'] = "#26CFFF"
+        self.mainFrame.pack()
+
+        canvas.create_window(0, 0, anchor='nw', window=self.mainFrame)
+        # make sure everything is displayed before configuring the scrollregion
+        canvas.update_idletasks()
+
+        canvas.configure(scrollregion=canvas.bbox(
+            'all'), yscrollcommand=scroll_y.set)
+
+        canvas.pack(fill='both', expand=True, side='left')
+        scroll_y.pack(fill='y', side='right')
+
+    def menu(self):
+        menubar = Menu(self.root,
+                       activebackground="#26CFFF",
+                       background="#26CFFF")
+        menubar.add_command(
+            activebackground="#DEC221",
+            background="#DEC221",
+            label="Liste de mots",
+            command=self.display, compound=LEFT
+        )
+        menubar.add_command(
+            activebackground="#26CFFF",
+            background="#26CFFF",
+            label=15*" ",)
+        menubar.add_command(label="Ajouter un mot",
+                            activebackground="#F55E31",
+                            background="#F55E31",
+                            compound=CENTER,
+                            command=self.addWord)
+        menubar.add_command(
+            activebackground="#26CFFF",
+            background="#26CFFF",
+            label=15*" ",)
+        menubar.add_command(label="Rechercher un mot",
+                            activebackground="#4BFA71",
+                            background="#4BFA71",
+                            compound=RIGHT,
+                            command=self.search)
+        self.root.config(menu=menubar)
 
     def destroyWidget(self):
         for widget in self.mainFrame.winfo_children():
@@ -74,6 +106,7 @@ class Application:
 
     def display(self):
         self.destroyWidget()
+
         Label(self.mainFrame,
               bg="#26CFFF",
               font=('times new roman', 20, "bold"),
@@ -115,6 +148,7 @@ class Application:
               font=('Algerian', 15, "bold"), text=f"Consultation du mot {self.mot.get()}",
               justify="center").place(x=50, y=10)
         i = 0
+        print(mot.definition() == '')
         if len(mot.etymologie()) != 0:
             i += 50
             Label(self.mainFrame, bg=self.bgFont, font=('Algerian', 10, "bold"),
@@ -163,7 +197,7 @@ class Application:
                 'Algerian', 10, "bold")).place(x=100, y=i)
             Label(self.mainFrame, bg=self.bgFont,  wraplength=250,
                   text=mot.difficulte()).place(x=200, y=i)
-        i += 100
+        i += 150
         Button(self.mainFrame,
                activebackground="#DEC221",
                bg="#DEC221",
@@ -176,6 +210,7 @@ class Application:
 
 
 # Modifier un mot
+
 
     def updateWord(self, nom):
         self.destroyWidget()
@@ -267,6 +302,7 @@ class Application:
 
 
 # Ajouter un mot
+
 
     def addWord(self):
         self.destroyWidget()
@@ -375,6 +411,7 @@ class Application:
             command=self.rechercher
         ).place(x=300, y=46)
     ##################################
+
         self.rltFrame = Frame(self.mainFrame, bg=self.bgFont,)
         self.rltFrame.place(x=0, y=100, width=450, height=600)
 
